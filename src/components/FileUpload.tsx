@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { initiateGoogleAuth, checkAuthStatus } from '@/lib/googleAuth';
+import { initiateGoogleAuth } from '@/lib/googleAuth';
 
 interface FileUploadProps {
   onUploadSuccess: (fileUrl: string, fileName: string) => void;

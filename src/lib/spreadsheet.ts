@@ -1,9 +1,6 @@
-import { Note, CreateNoteRequest, UpdateNoteRequest, NoteStorage } from '@/types/note';
+import { Note, CreateNoteRequest, UpdateNoteRequest } from '@/types/note';
 
 const SPREADSHEET_URL = process.env.NEXT_PUBLIC_SPREADSHEET_URL || '';
-
-// For development purposes, we'll handle missing URL gracefully
-const isDevelopment = process.env.NODE_ENV === 'development';
 
 export class SpreadsheetService {
   private static instance: SpreadsheetService;

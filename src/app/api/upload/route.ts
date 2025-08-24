@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { google } from 'googleapis';
-
-// Initialize Google Drive API
-const drive = google.drive('v3');
+// Note: Using direct API calls instead of googleapis library for better compatibility
+// import { google } from 'googleapis';
+// const drive = google.drive('v3');
 
 // Get OAuth2 access token from cookies or request headers
 const getAccessToken = (request: NextRequest): string | null => {

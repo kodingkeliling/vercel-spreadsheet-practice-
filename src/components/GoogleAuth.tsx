@@ -15,7 +15,7 @@ export default function GoogleAuth({ onAuthSuccess, onAuthError }: GoogleAuthPro
   useEffect(() => {
     // Check if user is already authenticated
     checkAuthStatus();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const checkAuthStatus = async () => {
     try {

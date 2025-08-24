@@ -126,7 +126,7 @@ export default function NoteForm({ note, onSubmit, onCancel, loading = false }: 
                 Attachments
               </label>
               <FileUpload
-                onUploadSuccess={(fileUrl, fileName) => {
+                onUploadSuccess={(fileUrl) => {
                   setAttachments(prev => [...prev, fileUrl]);
                 }}
                 onUploadError={(error) => {
