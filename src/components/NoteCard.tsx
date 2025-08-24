@@ -83,6 +83,25 @@ export default function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
         </div>
       )}
 
+      {note.attachments && note.attachments.length > 0 && (
+        <div className="mb-4">
+          <p className="text-sm font-medium text-gray-700 mb-2">Attachments:</p>
+          <div className="space-y-1">
+            {note.attachments.map((url, index) => (
+              <a
+                key={index}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-blue-600 hover:text-blue-800 text-sm truncate"
+              >
+                📎 Attachment {index + 1}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center text-sm text-gray-500">
         <span>Created: {formatDate(note.createdAt)}</span>
         {note.updatedAt !== note.createdAt && (

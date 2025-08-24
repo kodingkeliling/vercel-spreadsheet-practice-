@@ -5,6 +5,7 @@ export interface Note {
   createdAt: string;
   updatedAt: string;
   tags?: string[]; // Display as array in frontend
+  attachments?: string[]; // Display as array in frontend
   isArchived?: boolean;
 }
 
@@ -16,6 +17,7 @@ export interface NoteStorage {
   createdAt: string;
   updatedAt: string;
   tags?: string; // Store as semicolon-separated string
+  attachments?: string; // Store as semicolon-separated string
   isArchived?: boolean;
 }
 
@@ -23,12 +25,14 @@ export interface CreateNoteRequest {
   title: string;
   content: string;
   tags?: string; // Send as semicolon-separated string
+  attachments?: string; // Send as semicolon-separated string
 }
 
 export interface UpdateNoteRequest {
   title?: string;
   content?: string;
   tags?: string; // Send as semicolon-separated string
+  attachments?: string; // Send as semicolon-separated string
   isArchived?: boolean;
 }
 

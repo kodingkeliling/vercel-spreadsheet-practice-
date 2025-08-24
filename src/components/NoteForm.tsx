@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Note, CreateNoteRequest, UpdateNoteRequest } from '@/types/note';
 import TagInput from './TagInput';
+import FileUpload from './FileUpload';
 
 interface NoteFormProps {
   note?: Note;
@@ -15,6 +16,7 @@ export default function NoteForm({ note, onSubmit, onCancel, loading = false }: 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [attachments, setAttachments] = useState<string[]>([]);
   const [errors, setErrors] = useState<{ title?: string; content?: string }>({});
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function NoteForm({ note, onSubmit, onCancel, loading = false }: 
       setTitle(note.title);
       setContent(note.content);
       setTags(note.tags || []);
+      setAttachments(note.attachments || []);
     }
   }, [note]);
 
@@ -51,6 +54,7 @@ export default function NoteForm({ note, onSubmit, onCancel, loading = false }: 
       title: title.trim(),
       content: content.trim(),
       tags: tags.join(';'), // Convert array to semicolon-separated string
+      attachments: attachments.join(';'), // Convert array to semicolon-separated string
     };
 
     onSubmit(formData);
@@ -115,6 +119,50 @@ export default function NoteForm({ note, onSubmit, onCancel, loading = false }: 
                 placeholder="Add tags..."
                 disabled={loading}
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Attachments
+              </label>
+              <FileUpload
+                onUploadSuccess={(fileUrl, fileName) => {
+                  setAttachments(prev => [...prev, fileUrl]);
+                }}
+                onUploadError={(error) => {
+                  // You might want to show this error in a toast or alert
+                  console.error('Upload error:', error);
+                  alert(error);
+                }}
+                disabled={loading}
+              />
+              {attachments.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  <p className="text-sm font-medium text-gray-700">Uploaded files:</p>
+                  <div className="space-y-1">
+                    {attachments.map((url, index) => (
+                      <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 text-sm truncate"
+                        >
+                          Attachment {index + 1}
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setAttachments(prev => prev.filter((_, i) => i !== index))}
+                          className="text-red-600 hover:text-red-800 text-sm"
+                          disabled={loading}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end space-x-3 pt-4">

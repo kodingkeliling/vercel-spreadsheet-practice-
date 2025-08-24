@@ -61,6 +61,7 @@ export class SpreadsheetService {
           createdAt: row.createdAt || new Date().toISOString(),
           updatedAt: row.updatedAt || new Date().toISOString(),
           tags: row.tags ? (typeof row.tags === 'string' ? row.tags.split(';').map((tag: string) => tag.trim()).filter(tag => tag.length > 0) : []) : [],
+          attachments: row.attachments ? (typeof row.attachments === 'string' ? row.attachments.split(';').map((attachment: string) => attachment.trim()).filter(attachment => attachment.length > 0) : []) : [],
           isArchived: row.isArchived === 'true' || row.isArchived === true || false,
         }));
       }
@@ -77,6 +78,9 @@ export class SpreadsheetService {
       // Convert tags string to array for frontend display
       const tagsArray = noteData.tags ? noteData.tags.split(';').map(tag => tag.trim()).filter(tag => tag.length > 0) : [];
       
+      // Convert attachments string to array for frontend display
+      const attachmentsArray = noteData.attachments ? noteData.attachments.split(';').map(attachment => attachment.trim()).filter(attachment => attachment.length > 0) : [];
+      
       const newNote: Note = {
         id: `note_${Date.now()}`,
         title: noteData.title,
@@ -84,6 +88,7 @@ export class SpreadsheetService {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         tags: tagsArray,
+        attachments: attachmentsArray,
         isArchived: false,
       };
 
@@ -107,10 +112,13 @@ export class SpreadsheetService {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Google Apps Script response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
       }
 
       const result = await response.json();
+      console.log('Google Apps Script result:', result);
       
       if (result.success) {
         // Add to local cache
@@ -136,10 +144,14 @@ export class SpreadsheetService {
       // Convert tags string to array for frontend display
       const tagsArray = noteData.tags ? noteData.tags.split(';').map(tag => tag.trim()).filter(tag => tag.length > 0) : this.notes[noteIndex].tags;
       
+      // Convert attachments string to array for frontend display
+      const attachmentsArray = noteData.attachments ? noteData.attachments.split(';').map(attachment => attachment.trim()).filter(attachment => attachment.length > 0) : this.notes[noteIndex].attachments;
+      
       const updatedNote = {
         ...this.notes[noteIndex],
         ...noteData,
         tags: tagsArray,
+        attachments: attachmentsArray,
         updatedAt: new Date().toISOString(),
       };
 
